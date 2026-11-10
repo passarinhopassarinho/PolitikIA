@@ -1,0 +1,120 @@
+{
+ "gerado_em": "2026-11-06T12:00:00+00:00",
+ "fonte": "Dados de demonstração (fictícios)",
+ "demo": true,
+ "senadores": {
+  "90001": {
+   "nome": "Ana Exemplo",
+   "partido": "PART",
+   "uf": "PE",
+   "email": "senadora.exemplo1@exemplo.org",
+   "pagina": ""
+  },
+  "90002": {
+   "nome": "Bruno Exemplo",
+   "partido": "PART",
+   "uf": "SP",
+   "email": "senador.exemplo2@exemplo.org",
+   "pagina": ""
+  },
+  "90003": {
+   "nome": "Carla Exemplo",
+   "partido": "PART",
+   "uf": "AM",
+   "email": "senadora.exemplo3@exemplo.org",
+   "pagina": ""
+  }
+ },
+ "materias": [
+  {
+   "id": "900001",
+   "sigla": "PL",
+   "numero": "1001",
+   "ano": "2026",
+   "ementa": "Estabelece diretrizes de transparência e supervisão humana para o uso de inteligência artificial pela administração pública federal.",
+   "autor": "Ana Exemplo",
+   "apresentacao": "2026-10-20",
+   "temas": [
+    "Tecnologia e dados"
+   ],
+   "relatores": [
+    "90001"
+   ]
+  },
+  {
+   "id": "900002",
+   "sigla": "PL",
+   "numero": "1002",
+   "ano": "2026",
+   "ementa": "Dispõe sobre a proteção de crianças e adolescentes em jogos eletrônicos e plataformas digitais.",
+   "autor": "Bruno Exemplo",
+   "apresentacao": "2026-09-02",
+   "temas": [
+    "Infância e juventude",
+    "Tecnologia e dados"
+   ],
+   "relatores": [
+    "90002"
+   ]
+  },
+  {
+   "id": "900003",
+   "sigla": "PEC",
+   "numero": "5",
+   "ano": "2026",
+   "ementa": "Altera a Constituição Federal para dispor sobre o financiamento do saneamento básico em municípios de pequeno porte.",
+   "autor": "Carla Exemplo e outros",
+   "apresentacao": "2026-08-11",
+   "temas": [
+    "Meio ambiente"
+   ],
+   "relatores": [
+    "90003"
+   ]
+  },
+  {
+   "id": "900004",
+   "sigla": "PL",
+   "numero": "1003",
+   "ano": "2025",
+   "ementa": "Institui programa de educação em tempo integral nas escolas públicas.",
+   "autor": "Bruno Exemplo",
+   "apresentacao": "2025-11-30",
+   "temas": [
+    "Educação",
+    "Infância e juventude"
+   ],
+   "relatores": []
+  },
+  {
+   "id": "900005",
+   "sigla": "PLP",
+   "numero": "12",
+   "ano": "2026",
+   "ementa": "Altera normas tributárias para micro e pequenas empresas.",
+   "autor": "Ana Exemplo",
+   "apresentacao": "2026-06-14",
+   "temas": [
+    "Economia e trabalho"
+   ],
+   "relatores": [
+    "90002"
+   ]
+  },
+  {
+   "id": "900006",
+   "sigla": "PL",
+   "numero": "1004",
+   "ano": "2026",
+   "ementa": "Dispõe sobre proteção previdenciária de trabalhadores por aplicativo.",
+   "autor": "Carla Exemplo",
+   "apresentacao": "2026-05-03",
+   "temas": [
+    "Economia e trabalho"
+   ],
+   "relatores": [
+    "90001"
+   ]
+  }
+ ]
+}

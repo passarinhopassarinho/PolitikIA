@@ -1,0 +1,12 @@
+[
+  {
+    "exemplo": true,
+    "senador": "90001",
+    "temas": ["Tecnologia e dados"],
+    "texto": "EXEMPLO — Defendeu regras de transparência para o uso de IA pelo poder público.",
+    "fonte": "https://www12.senado.leg.br/ecidadania",
+    "fonte_desc": "Exemplo de fonte (substituir por link real)",
+    "data": "2026-09-12",
+    "curadoria": "iniciais de quem verificou"
+  }
+]
