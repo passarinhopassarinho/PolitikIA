@@ -103,6 +103,28 @@ def senadores():
     log(f"{len(out)} senadores em exercício")
     return out
 
+def norm_nome(x):
+    import unicodedata
+    x = unicodedata.normalize("NFD", x or "").encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z ]", "", x).strip()
+
+AUTOR_RE = re.compile(r"Senador[a]?\s+(.+?)\s*\(([^/()]+)/([A-Z]{2})\)")
+
+def autores_senadores(autor, sen):
+    """Códigos dos senadores autores, a partir do texto 'Senador Fulano (PART/UF), ...'."""
+    por_nome = {}
+    for cod, s in sen.items():
+        por_nome.setdefault((norm_nome(s["nome"]), s["uf"]), cod)
+    cods = []
+    for nome, _partido, uf in AUTOR_RE.findall(autor or ""):
+        cod = por_nome.get((norm_nome(nome), uf))
+        if not cod:  # tolera nome parlamentar abreviado
+            cand = [c for (n, u), c in por_nome.items() if u == uf and (n in norm_nome(nome) or norm_nome(nome) in n)]
+            cod = cand[0] if len(cand) == 1 else None
+        if cod and cod not in cods:
+            cods.append(cod)
+    return cods
+
 def materias():
     lista = {}
     for sigla in SIGLAS:
@@ -160,7 +182,7 @@ def main():
             anterior = json.load(open(SAIDA, encoding="utf-8"))
         except Exception:
             pass
-    rel_cache = {m["id"]: m.get("relatores", []) for m in anterior.get("materias", []) if not anterior.get("demo")}
+    cache = {} if anterior.get("demo") else {m["id"]: m for m in anterior.get("materias", [])}
 
     try:
         sen = senadores()
@@ -170,20 +192,24 @@ def main():
     if not mats:
         log("nenhuma matéria retornada, mantendo dados anteriores"); sys.exit(0)
 
-    # relatoria: prioriza as mais recentes; reaproveita cache das demais
     ordem = sorted(mats.values(), key=lambda m: m["apresentacao"], reverse=True)
-    feitas = 0
     for m in ordem:
-        if m["id"] in rel_cache and feitas >= MAX_RELATORIAS // 2:
-            m["relatores"] = rel_cache[m["id"]]; continue
-        if feitas < MAX_RELATORIAS:
-            m["relatores"] = relatores(m["id"]); feitas += 1; time.sleep(PAUSA)
-        else:
-            m["relatores"] = rel_cache.get(m["id"], [])
-    log(f"relatorias consultadas: {feitas}")
+        old = cache.get(m["id"], {})
+        m["relatores"] = old.get("relatores", [])
+        m["rel_consulta"] = old.get("rel_consulta", "")
+        m["autores_cod"] = autores_senadores(m["autor"], sen)
 
-    # só mantém senadores citados (arquivo menor)
-    usados = {c for m in mats.values() for c in m["relatores"]}
+    # relatoria: primeiro as nunca consultadas (mais recentes antes), depois as consultadas há mais tempo
+    hoje = date.today().isoformat()
+    fila = [m for m in ordem if not m["rel_consulta"]] + sorted([m for m in ordem if m["rel_consulta"]], key=lambda m: m["rel_consulta"])
+    feitas = 0
+    for m in fila[:MAX_RELATORIAS]:
+        m["relatores"] = relatores(m["id"]); m["rel_consulta"] = hoje; feitas += 1
+        time.sleep(PAUSA)
+    pend = sum(1 for m in ordem if not m["rel_consulta"])
+    log(f"relatorias consultadas: {feitas}; ainda sem consulta: {pend}")
+
+    usados = {c for m in ordem for c in m["relatores"] + m["autores_cod"]}
     saida = {
         "gerado_em": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "fonte": "Senado Federal — Dados Abertos (legis.senado.leg.br/dadosabertos)",

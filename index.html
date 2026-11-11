@@ -4,169 +4,393 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>PotikIA — Consultas públicas do Senado</title>
-<meta name="description" content="Encontre projetos em tramitação no Senado, opine no e-Cidadania e acione a relatoria. Sem cadastro e sem coleta de dados.">
+<meta name="color-scheme" content="light">
+<title>PotikIA — O que o Senado decide, em linguagem simples</title>
+<meta name="description" content="Entenda os projetos do Senado em linguagem simples, dê sua opinião no canal oficial e escreva para quem decide. Sem cadastro.">
 <style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#1d2321;--muted:#5d6763;--line:#e2ddd2;--brand:#0f6b4f;--brand-soft:#e3f1ea;--accent:#c2561a;--accent-soft:#fbeadf;--warn:#8a5f00;--warn-soft:#fff3d1;--r:14px;
---serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#131715;--card:#1b201e;--ink:#eef1ef;--muted:#a3ada8;--line:#2c3330;--brand:#5cc49b;--brand-soft:#1d3a2f;--accent:#f0915a;--accent-soft:#3a2518;--warn:#f2c55c;--warn-soft:#3a3018}}
+@font-face{font-family:"Jakarta";src:url(fonts/jakarta.woff2) format("woff2");font-weight:200 800;font-display:swap}
+:root{
+  --tinta:#1B1F3B;--tinta-2:#4A4F6E;--linha:#DDE1F0;
+  --cobalto:#2448D6;--cobalto-esc:#1A36A8;--ceu:#EEF2FF;
+  --ipe:#FFC736;--ipe-claro:#FFF4D1;
+  --folha:#13805D;--folha-claro:#E2F4EC;
+  --coral:#E8573F;--coral-claro:#FDE8E3;
+  --lilas:#6B4FD1;--lilas-claro:#EEE9FF;
+  --papel:#FFFFFF;
+  --display:"Jakarta",system-ui,sans-serif;--texto:"Jakarta",system-ui,sans-serif;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
-a{color:var(--brand)}
-header{padding:28px 20px 8px;max-width:1080px;margin:0 auto}
-h1{font-family:var(--serif);font-size:30px;line-height:1.15;margin:0 0 6px}
-h1 span{color:var(--brand)}
-.lede{color:var(--muted);margin:0 0 14px;max-width:660px}
-.pill{display:inline-flex;gap:8px;align-items:center;background:var(--brand-soft);color:var(--brand);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;border:0;cursor:pointer}
-.notice{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:8px 12px;font-size:13px;margin-top:12px}
-.updated{font-size:12.5px;color:var(--muted);margin-top:10px}
-main{max-width:1080px;margin:0 auto;padding:8px 20px 60px;display:grid;grid-template-columns:270px 1fr;gap:22px}
-@media (max-width:820px){main{grid-template-columns:1fr}}
-aside{position:sticky;top:12px;align-self:start;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-@media (max-width:820px){aside{position:static}}
-aside h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
-aside h3:first-child{margin-top:0}
-input[type=search],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
-textarea{min-height:170px;resize:vertical}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:5px 11px;font:inherit;font-size:13px;cursor:pointer}
-.chip[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:#fff}
-.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.seg button{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:7px 6px;cursor:pointer}
-.seg button[aria-pressed=true]{background:var(--brand-soft);color:var(--brand);font-weight:600}
-.toggle{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:6px;cursor:pointer}
-.linkbtn{background:none;border:0;color:var(--brand);font:inherit;font-size:13px;cursor:pointer;padding:0;margin-top:12px;text-decoration:underline}
-.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap}
-.count{color:var(--muted);font-size:14px}
-.list{display:grid;gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;color:var(--muted);margin-bottom:6px;align-items:center}
-.badge{font-size:12px;font-weight:700;border-radius:6px;padding:2px 8px;background:var(--brand-soft);color:var(--brand)}
-.card h2{font-size:16px;line-height:1.4;margin:2px 0 8px;font-weight:600}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tag{font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 13px;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
-.btn.saved{color:var(--accent);border-color:var(--accent)}
-.empty{text-align:center;color:var(--muted);padding:40px 10px;background:var(--card);border:1px dashed var(--line);border-radius:var(--r)}
-.more{display:block;margin:16px auto 0}
-dialog{border:0;border-radius:18px;padding:0;max-width:620px;width:calc(100% - 24px);background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
-dialog::backdrop{background:rgba(10,14,12,.45)}
-.dlg-h{padding:18px 20px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:start}
-.dlg-h h2{font-family:var(--serif);font-size:20px;margin:0}
-.dlg-b{padding:16px 20px 20px;max-height:72vh;overflow:auto}
-.x{border:0;background:transparent;font-size:24px;color:var(--muted);cursor:pointer;line-height:1}
-.parl{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
-.parl label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
-.parl strong{display:block}
-.parl small{color:var(--muted)}
-.promise{margin-top:8px;font-size:13px;background:var(--bg);border-left:3px solid var(--accent);padding:6px 10px;border-radius:0 8px 8px 0}
-.promise .src{color:var(--muted);font-size:12px}
-.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
-.addr{font-family:ui-monospace,monospace;font-size:13px;background:var(--bg);border-radius:8px;padding:8px 10px;word-break:break-all;margin:6px 0}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+[hidden]{display:none!important}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--papel);color:var(--tinta);font:16.5px/1.6 var(--texto);-webkit-font-smoothing:antialiased}
+a{color:var(--cobalto)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ipe);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* topo */
+.hero{background:var(--cobalto);color:#fff;padding:18px 0 34px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-110px;bottom:-130px;width:340px;height:340px;border-radius:50%;background:var(--ipe);opacity:.95;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:38px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.02em;color:#fff;text-decoration:none}
+.logo svg{flex:none}
+.priv{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer;display:flex;gap:7px;align-items:center}
+.priv:hover{background:rgba(255,255,255,.24)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,60px);line-height:1.04;letter-spacing:-.03em;margin:0 0 14px;max-width:14ch}
+.lede{font-size:18px;max-width:52ch;margin:0 0 26px;color:#E4E9FF}
+.search{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:6px 6px 6px 16px;max-width:620px;box-shadow:0 0 0 4px var(--ipe)}
+.search svg{flex:none;color:var(--tinta-2)}
+.search input{border:0;outline:0;flex:1;min-width:0;padding:10px 0;font-size:17px;color:var(--tinta);background:transparent}
+.search button{border:0;background:var(--tinta);color:#fff;border-radius:11px;padding:10px 16px;font-weight:700;cursor:pointer}
+.temas-t{font-family:var(--display);font-weight:700;font-size:19px;margin:30px 0 12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:#fff;color:var(--tinta);border:3px solid transparent;border-radius:18px;padding:14px;cursor:pointer;min-height:112px;transition:transform .12s}
+.tile:hover{transform:translateY(-2px)}
+.tile .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.tile b{font-family:var(--display);font-size:16px;line-height:1.15;font-weight:700}
+.tile small{color:var(--tinta-2);font-size:13px;margin-top:auto}
+.tile[aria-pressed=true]{border-color:var(--ipe);box-shadow:0 0 0 2px var(--tinta) inset}
+.tile[aria-pressed=true] small::after{content:", selecionado"}
+
+/* como funciona */
+.how{padding:34px 0 8px}
+.how ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:720px){.how ol{grid-template-columns:1fr;gap:12px}}
+.how li{display:flex;gap:14px;align-items:flex-start}
+.how .n{flex:none;width:38px;height:38px;border-radius:50%;background:var(--ipe);font-family:var(--display);font-weight:800;font-size:19px;display:grid;place-items:center}
+.how b{display:block;font-family:var(--display);font-size:18px;line-height:1.2;margin-bottom:2px}
+.how p{margin:0;color:var(--tinta-2);font-size:15.5px}
+
+/* resultados */
+.res{padding:30px 0 70px}
+.res-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid var(--tinta);padding-bottom:12px;margin-bottom:6px}
+.res-h h2{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.02em;margin:0;line-height:1.1}
+.res-h .count{display:block;font-family:var(--texto);font-weight:400;font-size:15px;color:var(--tinta-2);letter-spacing:0;margin-top:4px}
+.ctl{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--tinta);background:#fff;color:var(--tinta);border-radius:12px;padding:9px 15px;font-weight:700;font-size:15.5px;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn:hover{background:var(--ceu)}
+.btn.pri{background:var(--cobalto);border-color:var(--cobalto);color:#fff}
+.btn.pri:hover{background:var(--cobalto-esc)}
+.btn.verde{background:var(--folha);border-color:var(--folha);color:#fff}
+.btn.verde:hover{filter:brightness(.92)}
+.btn.sm{padding:6px 11px;font-size:14px;border-width:1.5px}
+select.sort{border:2px solid var(--tinta);border-radius:12px;padding:8px 10px;background:#fff;font-weight:700;font-size:15px}
+.ativos{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.ativo{display:inline-flex;align-items:center;gap:6px;background:var(--ceu);border:0;border-radius:999px;padding:5px 10px 5px 12px;font-size:14px;cursor:pointer}
+.ativo::after{content:"×";font-size:17px;line-height:1;color:var(--tinta-2)}
+.lista{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:8px 1fr;gap:0 18px;padding:20px 0;border-bottom:1px solid var(--linha)}
+.item .faixa{border-radius:8px}
+.item .tipo{font-size:14px;color:var(--tinta-2);margin:0 0 4px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.item .tipo strong{color:var(--tinta)}
+.item h3{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.25;letter-spacing:-.01em;margin:0 0 8px;max-width:62ch}
+.autoria{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+.avatar{flex:none;width:34px;height:34px;border-radius:50%;background:var(--tinta);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:.02em}
+.avatar.inst{background:var(--ceu);color:var(--cobalto)}
+.autoria .quem{font-weight:800;font-size:16px;line-height:1.2}
+.autoria .quem small{display:block;font-weight:500;font-size:13px;color:var(--tinta-2)}
+.partido{display:inline-block;font-weight:800;font-size:13px;border:1.5px solid var(--tinta);border-radius:7px;padding:1px 7px;letter-spacing:.02em}
+.coaut{font-size:13.5px;color:var(--tinta-2)}
+.resumo-in{background:var(--lilas-claro);border-radius:14px;padding:12px 14px;margin:2px 0 12px;font-size:15.5px}
+.resumo-in p{margin:0 0 6px}.resumo-in ul{margin:0 0 6px;padding-left:20px}
+.btn.lilas{border-color:var(--lilas);color:var(--lilas)}
+.btn.lilas[aria-expanded=true]{background:var(--lilas);color:#fff}
+.autores-lista{display:grid;gap:8px}
+.autor-card{display:flex;gap:12px;align-items:center;border:1.5px solid var(--linha);border-radius:14px;padding:10px 12px}
+.item .simples{font-size:12.5px;color:var(--lilas);font-weight:700;margin-left:6px;white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.tag{font-size:13.5px;border-radius:8px;padding:2px 9px;background:var(--ceu)}
+.item .acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.contato-hint{font-size:14px;color:var(--folha);font-weight:700;display:inline-flex;gap:6px;align-items:center}
+.star{border:0;background:transparent;cursor:pointer;padding:6px;border-radius:10px;color:var(--tinta-2);display:inline-flex;gap:6px;align-items:center;font-size:14.5px}
+.star[aria-pressed=true]{color:#B07800}
+.star[aria-pressed=true] svg{fill:var(--ipe);stroke:#B07800}
+.vazio{padding:40px 0;text-align:center;color:var(--tinta-2)}
+.vazio b{display:block;font-family:var(--display);font-size:21px;color:var(--tinta);margin-bottom:6px}
+.mais{display:flex;margin:22px auto 0}
+footer{background:var(--tinta);color:#C9CDE4;padding:30px 0 40px;font-size:15px}
+footer a{color:#fff}
+footer p{margin:0 0 8px;max-width:70ch}
+
+/* dialogs (folha de baixo no celular) */
+dialog{border:0;padding:0;background:#fff;color:var(--tinta);width:min(680px,100%);max-height:92vh;border-radius:22px;box-shadow:0 30px 80px rgba(27,31,59,.35)}
+dialog::backdrop{background:rgba(27,31,59,.55)}
+@media (max-width:640px){dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:22px 22px 0 0;max-height:94vh}
+  dialog[open]{animation:sobe .22s ease-out}}
+@keyframes sobe{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.d-h{position:sticky;top:0;background:#fff;z-index:2;padding:18px 22px 12px;border-bottom:1px solid var(--linha);display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.d-h h2{font-family:var(--display);font-weight:800;font-size:23px;line-height:1.15;letter-spacing:-.02em;margin:2px 0 0}
+.d-h .sup{font-size:14px;color:var(--tinta-2)}
+.fechar{flex:none;border:0;background:var(--ceu);width:38px;height:38px;border-radius:50%;font-size:22px;cursor:pointer;line-height:1}
+.d-b{padding:18px 22px 26px}
+.bloco{margin:0 0 22px}
+.bloco h3{font-family:var(--display);font-weight:700;font-size:18px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.bloco h3 .n{width:28px;height:28px;border-radius:50%;background:var(--ipe);display:grid;place-items:center;font-size:15px;flex:none}
+.explica{background:var(--lilas-claro);border-radius:16px;padding:14px 16px}
+.explica p{margin:0 0 8px}
+.explica ul{margin:0 0 8px;padding-left:20px}
+.nota{font-size:13.5px;color:var(--tinta-2);margin:6px 0 0}
+details.ementa{border:1.5px solid var(--linha);border-radius:12px;padding:0 14px;margin-top:10px}
+details.ementa summary{cursor:pointer;padding:10px 0;font-weight:700;font-size:15px}
+details.ementa p{margin:0 0 12px;font-size:15px}
+.linha-acoes{display:flex;flex-wrap:wrap;gap:10px}
+.pessoa{border:1.5px solid var(--linha);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.pessoa label{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.pessoa input{width:20px;height:20px;margin-top:3px;accent-color:var(--cobalto)}
+.pessoa strong{display:block}
+.papel{display:inline-block;font-size:12.5px;font-weight:700;border-radius:6px;padding:1px 7px;margin-right:6px}
+.papel.Relatoria{background:var(--folha-claro);color:var(--folha)}
+.papel.Autoria{background:var(--ipe-claro);color:#7A5600}
+.compromisso{margin:10px 0 0 32px;font-size:14.5px;background:var(--ipe-claro);border-radius:10px;padding:8px 12px}
+.opcoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opcao{border:2px solid var(--linha);background:#fff;border-radius:14px;padding:11px 12px;text-align:left;cursor:pointer;font-weight:700}
+.opcao small{display:block;font-weight:400;color:var(--tinta-2);font-size:13.5px}
+.opcao[aria-pressed=true]{border-color:var(--cobalto);background:var(--ceu)}
+label.campo{display:block;font-weight:700;margin:14px 0 6px}
+label.campo small{font-weight:400;color:var(--tinta-2)}
+textarea,input.txt{width:100%;border:2px solid var(--linha);border-radius:12px;padding:10px 12px;background:#fff;font-size:16px}
+textarea:focus,input.txt:focus{border-color:var(--cobalto);outline:0}
+textarea{resize:vertical;min-height:84px}
+textarea.preview{min-height:230px;background:#FAFBFF}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.dois{grid-template-columns:1fr}}
+.passos{margin:0;padding-left:22px}
+.passos li{margin-bottom:10px}
+.copiavel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.copiavel code{font-family:var(--texto);background:var(--ceu);border-radius:8px;padding:5px 9px;font-size:15px;word-break:break-all}
+.ia-box{background:var(--ceu);border-radius:16px;padding:14px 16px;margin-top:12px}
+.ia-box p{margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--linha);background:#fff;border-radius:999px;padding:6px 13px;cursor:pointer;font-weight:700;font-size:14.5px}
+.chip[aria-pressed=true]{border-color:var(--tinta);background:var(--tinta);color:#fff}
+.toggle{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linha);cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--cobalto)}
+/* assistente */
+.progresso{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 18px}
+.progresso span{height:6px;border-radius:6px;background:var(--linha)}
+.progresso span.on{background:var(--cobalto)}
+.qnum{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--cobalto)}
+h3.q{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.2;letter-spacing:-.02em;margin:0 0 12px}
+.dica{margin:-4px 0 12px;color:var(--tinta-2);font-size:15px}
+.rot{font-weight:800;margin:0 0 8px}
+.passo textarea{min-height:120px}
+.nav-passos{display:flex;justify-content:space-between;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid var(--linha)}
+.nav-passos .btn{min-width:110px}
+.envio .passos li{margin-bottom:14px}
+.envio{background:var(--folha-claro);border-radius:16px;padding:14px 16px}
+.share-prev{background:var(--ceu);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:15px;white-space:pre-line}
+.share-btns{display:grid;gap:10px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:11px 18px;border-radius:999px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.on{opacity:1}
-ul.clean{padding-left:18px;margin:6px 0 12px}
-footer{max-width:1080px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:13px}
+.aviso-demo{background:var(--ipe);color:var(--tinta);border-radius:12px;padding:8px 12px;font-size:14.5px;margin-top:18px;max-width:620px}
 </style>
 </head>
 <body>
-<header>
-  <h1>O que o Senado está decidindo <span>e como você pode opinar.</span></h1>
-  <p class="lede">Todo projeto em tramitação no Senado aceita sua opinião no portal e-Cidadania até o fim da tramitação. Filtre por tema, opine no canal oficial e escreva para a relatoria.</p>
-  <button class="pill" id="openPrivacy">🔒 Sem cadastro. Suas escolhas ficam só neste aparelho.</button>
-  <div class="notice" id="demoNotice" hidden><strong>Dados de demonstração.</strong> Os projetos e senadores abaixo são fictícios. Os dados reais aparecem após a primeira atualização automática.</div>
-  <div class="updated" id="updated"></div>
-</header>
 
-<main>
-  <aside>
-    <h3>Buscar</h3>
-    <input type="search" id="q" placeholder="Ex.: inteligência artificial, SUS…" aria-label="Buscar">
-    <h3>Temas</h3>
-    <div class="chips" id="temaChips"></div>
-    <h3>Tipo</h3>
-    <div class="seg" id="tipoSeg"></div>
-    <label class="toggle"><input type="checkbox" id="onlyRel"> Só com relatoria definida</label>
-    <label class="toggle"><input type="checkbox" id="onlyFav"> Só as que salvei</label>
-    <label class="toggle"><input type="checkbox" id="onlyMine"> Só meus temas de interesse</label>
-    <button class="linkbtn" id="setInterests">Definir meus temas de interesse</button><br>
-    <button class="linkbtn" id="clearFilters">Limpar filtros</button>
-  </aside>
-  <section>
+<section class="hero">
+  <div class="wrap">
     <div class="bar">
-      <span class="count" id="count">Carregando…</span>
-      <select id="sort" aria-label="Ordenar" style="width:auto">
-        <option value="recente">Apresentadas mais recentemente</option>
-        <option value="antiga">Mais antigas primeiro</option>
-      </select>
+      <a class="logo" href="./" aria-label="PotikIA, página inicial">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 8a6 6 0 0 1 6-6h14a6 6 0 0 1 6 6v10a6 6 0 0 1-6 6H15l-7 7v-7.3A6 6 0 0 1 4 18z" fill="#FFC736"/><circle cx="12" cy="13" r="2.2" fill="#1B1F3B"/><circle cx="17" cy="13" r="2.2" fill="#1B1F3B"/><circle cx="22" cy="13" r="2.2" fill="#1B1F3B"/></svg>
+        PotikIA
+      </a>
+      <button class="priv" id="openPriv"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Sem cadastro</button>
     </div>
-    <div class="list" id="list"></div>
-    <button class="btn more" id="more" hidden>Mostrar mais</button>
-  </section>
-</main>
+    <h1>O que o Senado decide muda o seu dia a dia.</h1>
+    <p class="lede">Entenda os projetos em linguagem simples, dê sua opinião no canal oficial e escreva para quem decide.</p>
+    <form class="search" id="searchForm" role="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label class="sr" for="q">Buscar projetos</label>
+      <input id="q" type="search" placeholder="Busque por um assunto: aposentadoria, escola, SUS…" autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+    <div class="aviso-demo" id="demo" hidden>Você está vendo dados de demonstração. Os projetos reais aparecem depois da primeira atualização automática.</div>
+    <p class="temas-t">Ou escolha um assunto</p>
+    <div class="tiles" id="tiles"></div>
+  </div>
+</section>
+
+<section class="how" aria-labelledby="howT">
+  <div class="wrap">
+    <h2 id="howT" class="sr">Como funciona</h2>
+    <ol>
+      <li><span class="n">1</span><div><b>Escolha um assunto</b><p>Todos os projetos em andamento no Senado, atualizados todo dia.</p></div></li>
+      <li><span class="n">2</span><div><b>Entenda o projeto</b><p>Em “Entender e agir”, veja o que ele faz e como te afeta, em linguagem simples.</p></div></li>
+      <li><span class="n">3</span><div><b>Opine e fale com quem decide</b><p>Vote no portal do Senado e, com a nossa ajuda, mande uma mensagem para quem relata ou propôs.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="res" id="lista" aria-labelledby="resT">
+  <div class="wrap">
+    <div class="res-h">
+      <h2 id="resT"><span id="resTitle">Todos os projetos</span><span class="count" id="count">Carregando…</span></h2>
+      <div class="ctl">
+        <button class="btn sm" id="openFil"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4"/></svg><span id="filLabel">Filtros</span></button>
+        <label class="sr" for="sort">Ordenar</label>
+        <select class="sort" id="sort"><option value="recente">Mais recentes</option><option value="antiga">Mais antigos</option></select>
+      </div>
+    </div>
+    <div class="ativos" id="ativos"></div>
+    <ul class="lista" id="list"></ul>
+    <button class="btn mais" id="more" hidden>Mostrar mais projetos</button>
+  </div>
+</section>
 
 <footer>
-  PotikIA · projeto cívico e apartidário. Dados públicos do Senado Federal (Dados Abertos e e-Cidadania), atualizados diariamente.
-  Não coletamos nome, e-mail, CPF, localização nem opinião. Mensagens a senadores saem do seu próprio e-mail.
-  <a href="privacidade.html">Política de privacidade</a>
+  <div class="wrap">
+    <p><b style="color:#fff">PotikIA</b> é um projeto cívico e apartidário. Os dados vêm do Senado Federal (Dados Abertos e e-Cidadania) e são atualizados diariamente.</p>
+    <p>Não pedimos cadastro e não coletamos nome, e-mail, localização nem opinião. Mensagens a senadores saem do seu próprio e-mail. <a href="privacidade.html">Política de privacidade</a></p>
+    <p id="updated"></p>
+  </div>
 </footer>
 
-<dialog id="dlgAct">
-  <div class="dlg-h"><div><small id="actRef" style="color:var(--muted)"></small><h2 id="actTitle"></h2></div><button class="x" data-close aria-label="Fechar">&times;</button></div>
-  <div class="dlg-b">
-    <p style="margin-top:0"><strong>1. Quem acionar</strong></p>
-    <div id="parlList"></div>
-    <p class="note">Compromissos públicos só aparecem com fonte verificável. Senadores não registram plano de governo no TSE; a lista é curada e segue a mesma metodologia para todos.</p>
-    <p style="margin-top:16px"><strong>2. Sua posição</strong> <small style="color:var(--muted)">(não é salva)</small></p>
-    <div class="seg" id="posSeg"></div>
-    <p style="margin-top:16px"><strong>3. Revise a mensagem</strong></p>
-    <textarea id="msg"></textarea>
-    <p class="note">Assine como quiser no seu e-mail. Este site não vê nem guarda o que você envia.</p>
-    <div id="sendBox" style="margin-top:12px"></div>
+<!-- Detalhe do projeto -->
+<dialog id="dlgDet" aria-labelledby="detTitle">
+  <div class="d-h"><div><div class="sup" id="detSup"></div><h2 id="detTitle"></h2></div><button class="fechar" data-close aria-label="Fechar">&times;</button></div>
+  <div class="d-b" id="detBody"></div>
+</dialog>
+
+<!-- Escrever mensagem -->
+<dialog id="dlgW" aria-labelledby="wTitle">
+  <div class="d-h"><div><div class="sup" id="wSup"></div><h2 id="wTitle">Vamos montar sua mensagem</h2></div><button class="fechar" data-close aria-label="Fechar">&times;</button></div>
+  <div class="d-b">
+    <div class="progresso" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+    <section class="passo" data-step="1">
+      <p class="qnum">Pergunta 1 de 3</p>
+      <h3 class="q">O que você pensa sobre este projeto?</h3>
+      <div class="opcoes" id="wPos"></div>
+    </section>
+
+    <section class="passo" data-step="2" hidden>
+      <p class="qnum">Pergunta 2 de 3</p>
+      <h3 class="q"><label for="wWhy">Por que isso importa para você?</label></h3>
+      <p class="dica">Uma ou duas frases bastam. Contar sua experiência faz a mensagem ser lida com mais atenção.</p>
+      <textarea id="wWhy" placeholder="Ex.: sou professora da rede pública e vejo todo dia…"></textarea>
+    </section>
+
+    <section class="passo" data-step="3" hidden>
+      <p class="qnum">Pergunta 3 de 3</p>
+      <h3 class="q"><label for="wImp">Como isso afeta você ou sua comunidade?</label></h3>
+      <p class="dica">Se não souber, pode pular.</p>
+      <textarea id="wImp" placeholder="Ex.: na minha cidade, a escola mais próxima fica a 20 km…"></textarea>
+    </section>
+
+    <section class="passo" data-step="4" hidden>
+      <h3 class="q">Sua mensagem está pronta</h3>
+      <div class="bloco"><p class="rot">Para quem vai</p><div id="wPessoas"></div></div>
+      <div class="bloco">
+        <p class="rot"><label for="wMsg">Mensagem</label></p>
+        <textarea class="preview" id="wMsg"></textarea>
+        <div class="dois">
+          <div><label class="campo" for="wNome">Seu nome <small>(opcional)</small></label><input class="txt" id="wNome" autocomplete="name"></div>
+          <div><label class="campo" for="wCid">Cidade e estado <small>(opcional)</small></label><input class="txt" id="wCid" placeholder="Ex.: Recife (PE)"></div>
+        </div>
+        <p class="nota">Nada do que você escreve aqui é salvo ou enviado para nós. Ao fechar a janela, tudo é apagado.</p>
+      </div>
+      <div class="bloco envio"><p class="rot">Agora é só copiar e colar</p><div id="wEnvio"></div></div>
+      <div class="bloco">
+        <button class="btn sm" id="wIA">Quero melhorar o texto com a minha IA</button>
+        <div class="ia-box" id="wIABox" hidden>
+          <p><b>Instrução copiada.</b> Agora:</p>
+          <ol class="passos">
+            <li>Abra a IA que você já usa: <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">ChatGPT</a>, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a> ou <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a>.</li>
+            <li>Cole a instrução e envie. Ela devolve o e-mail redigido e um assunto.</li>
+            <li>Revise, ajuste o que quiser e siga os passos de envio acima, colando o texto da IA no lugar da mensagem.</li>
+          </ol>
+          <p class="nota">A instrução leva o projeto e suas respostas, sem seu nome nem sua cidade. O texto passa a ser tratado pela IA que você escolher, conforme as regras dela.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="nav-passos" id="wNav">
+      <button class="btn" id="wBack">Voltar</button>
+      <button class="btn pri" id="wNext">Próxima</button>
+    </div>
   </div>
 </dialog>
 
-<dialog id="dlgPriv">
-  <div class="dlg-h"><h2>Seus dados, seu aparelho</h2><button class="x" data-close aria-label="Fechar">&times;</button></div>
-  <div class="dlg-b">
-    <p style="margin-top:0">Não há conta, login nem servidor guardando informações suas. Fica salvo <strong>apenas no navegador deste aparelho</strong>:</p>
-    <ul class="clean" id="privList"></ul>
-    <p class="note">A posição que você escolhe ao escrever uma mensagem nunca é salva. <a href="privacidade.html">Leia a política completa</a>.</p>
-    <div class="actions" style="margin-top:14px">
-      <button class="btn" id="exportBtn">Copiar meus dados</button>
-      <button class="btn" id="importToggle">Importar de outro aparelho</button>
-      <button class="btn" id="wipeBtn" style="color:var(--accent);border-color:var(--accent)">Apagar tudo</button>
+<!-- Compartilhar -->
+<dialog id="dlgShare" aria-labelledby="shT">
+  <div class="d-h"><div><div class="sup" id="shSup"></div><h2 id="shT">Compartilhar este projeto</h2></div><button class="fechar" data-close aria-label="Fechar">&times;</button></div>
+  <div class="d-b">
+    <p style="margin-top:0">Quem receber vai abrir direto este projeto no site, com a explicação e os caminhos para opinar.</p>
+    <div class="share-prev" id="shPrev"></div>
+    <div class="share-btns">
+      <a class="btn verde" id="shWa" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>Enviar pelo WhatsApp</a>
+      <button class="btn pri" id="shNative" hidden><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Compartilhar em outro app</button>
+      <button class="btn" id="shCopy">Copiar link</button>
+    </div>
+    <p class="nota">O link não carrega nenhuma informação sobre você.</p>
+  </div>
+</dialog>
+
+<!-- Filtros -->
+<dialog id="dlgFil" aria-labelledby="filT">
+  <div class="d-h"><h2 id="filT">Filtros</h2><button class="fechar" data-close aria-label="Fechar">&times;</button></div>
+  <div class="d-b">
+    <div class="bloco"><h3>Tipo de proposta</h3><div class="chips" id="fTipo"></div></div>
+    <div class="bloco">
+      <label class="toggle"><input type="checkbox" id="fCont"> Só com senador(a) para contatar</label>
+      <label class="toggle"><input type="checkbox" id="fFav"> Só os que salvei</label>
+      <label class="toggle"><input type="checkbox" id="fMine"> Só os meus assuntos de interesse</label>
+    </div>
+    <div class="bloco"><h3>Meus assuntos de interesse</h3><p class="nota" style="margin:0 0 10px">Ficam salvos só neste aparelho.</p><div class="chips" id="fInt"></div></div>
+    <div class="linha-acoes"><button class="btn pri" data-close id="fVer">Ver projetos</button><button class="btn" id="fLimpar">Limpar filtros</button></div>
+  </div>
+</dialog>
+
+<!-- Privacidade -->
+<dialog id="dlgPriv" aria-labelledby="privT">
+  <div class="d-h"><h2 id="privT">Seus dados ficam com você</h2><button class="fechar" data-close aria-label="Fechar">&times;</button></div>
+  <div class="d-b">
+    <p style="margin-top:0">Não há conta nem login, e nenhum servidor guarda informações suas. Só o navegador deste aparelho guarda:</p>
+    <ul id="privList"></ul>
+    <p class="nota">O que você escreve nas mensagens nunca é salvo. <a href="privacidade.html">Leia a política completa</a>.</p>
+    <div class="linha-acoes" style="margin-top:16px">
+      <button class="btn sm" id="exportBtn">Copiar meus dados</button>
+      <button class="btn sm" id="importToggle">Trazer de outro aparelho</button>
+      <button class="btn sm" id="wipeBtn" style="border-color:var(--coral);color:var(--coral)">Apagar tudo</button>
     </div>
     <div id="importBox" hidden style="margin-top:12px">
-      <textarea id="importTxt" placeholder="Cole aqui o texto copiado do outro aparelho" style="min-height:90px"></textarea>
-      <button class="btn primary" id="importBtn" style="margin-top:8px">Importar</button>
+      <label class="sr" for="importTxt">Dados de outro aparelho</label>
+      <textarea id="importTxt" placeholder="Cole aqui o texto copiado no outro aparelho"></textarea>
+      <button class="btn pri sm" id="importBtn" style="margin-top:8px">Trazer dados</button>
     </div>
   </div>
 </dialog>
 
-<dialog id="dlgInt">
-  <div class="dlg-h"><h2>Meus temas de interesse</h2><button class="x" data-close aria-label="Fechar">&times;</button></div>
-  <div class="dlg-b">
-    <p style="margin-top:0">Escolha os temas que quer acompanhar. Fica salvo só aqui.</p>
-    <div class="chips" id="intChips"></div>
-    <button class="btn primary" data-close style="margin-top:16px">Pronto</button>
-  </div>
-</dialog>
-
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
-const PAGE=30;
+// ---------- configuração ----------
+const PAGE=25;
 const ECID=id=>`https://www12.senado.leg.br/ecidadania/visualizacaomateria?id=${encodeURIComponent(id)}`;
 const TRAM=id=>`https://www25.senado.leg.br/web/atividade/materias/-/materia/${encodeURIComponent(id)}`;
-let DB={materias:[],senadores:{}},COMP=[],TEMAS=[];
+const TIPOS={PL:"Projeto de lei",PEC:"Mudança na Constituição",PLP:"Lei complementar",PDL:"Decreto legislativo",MPV:"Medida provisória"};
+const IC={
+ "Tecnologia e dados":['#2448D6','#EEF2FF','<rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>'],
+ "Saúde":['#E8573F','#FDE8E3','<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'],
+ "Educação":['#6B4FD1','#EEE9FF','<path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10v5c3 2 7 2 10 0v-5"/>'],
+ "Meio ambiente":['#13805D','#E2F4EC','<path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/>'],
+ "Infância e juventude":['#B07800','#FFF4D1','<path d="M12 3l7 7-7 7-7-7z"/><path d="M12 17c0 2-1 3-3 4"/>'],
+ "Segurança pública":['#1B1F3B','#E8EAF3','<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/>'],
+ "Economia e trabalho":['#2448D6','#EEF2FF','<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2"/>'],
+ "Cidades e transporte":['#E8573F','#FDE8E3','<rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 17v3M16 17v3"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/>'],
+ "Direitos e cidadania":['#6B4FD1','#EEE9FF','<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2-6 5-6s5 3 5 6M11 20c0-3 2-6 5-6s5 3 5 6"/>'],
+ "Outros":['#4A4F6E','#EEF0F6','<circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/>']
+};
+const icon=(t,s=22)=>{const c=IC[t]||IC.Outros;return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c[0]}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${c[2]}</svg>`};
+let DB={materias:[],senadores:{}},COMP=[],EXP={},TEMAS=[];
 
 // ---------- armazenamento local ----------
 const KEY="potikia.senado.v1";
-const store={load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}},
-  save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}},wipe(){try{localStorage.removeItem(KEY)}catch(e){}}};
+const store={load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}},save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}},wipe(){try{localStorage.removeItem(KEY)}catch(e){}}};
 let prefs=Object.assign({favoritos:[],interesses:[]},store.load());
 const DEF={q:"",temas:[],tipo:"Todos",onlyRel:false,onlyFav:false,onlyMine:false,sort:"recente"};
 let F=Object.assign({},DEF,prefs.filtros||{}),shown=PAGE;
@@ -176,134 +400,280 @@ const persist=()=>store.save({favoritos:prefs.favoritos,interesses:prefs.interes
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
-const fmt=d=>{if(!d)return"";const x=new Date(d.length===10?d+"T12:00:00":d);return isNaN(x)?d:x.toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"})};
+const fmt=d=>{if(!d)return"";const x=new Date(d.length===10?d+"T12:00:00":d);return isNaN(x)?d:x.toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"})};
 const ref=m=>`${m.sigla} ${m.numero}/${m.ano}`;
+const tipoNome=m=>TIPOS[m.sigla]||m.sigla;
 const toggleIn=(a,v)=>a.includes(v)?a.filter(x=>x!==v):[...a,v];
-function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),1900)}
-async function copy(t,ok){try{await navigator.clipboard.writeText(t);toast(ok||"Copiado")}catch(e){toast("Não deu para copiar — selecione o texto e copie")}}
-function seg(el,opts,val,cb){el.innerHTML="";opts.forEach(o=>{const b=document.createElement("button");b.textContent=o;b.setAttribute("aria-pressed",o===val);b.onclick=()=>cb(o);el.appendChild(b)})}
-function chips(el,list,sel,cb){el.innerHTML="";list.forEach(t=>{const b=document.createElement("button");b.className="chip";b.textContent=t;b.setAttribute("aria-pressed",sel.includes(t));b.onclick=()=>cb(t);el.appendChild(b)})}
+const primeiraFrase=t=>{const m=String(t||"").match(/^.+?[.!?](\s|$)/);return (m?m[0]:t||"").trim()};
+const titulo=m=>{const t=m.ementa||"Ementa não informada";return t.length>190?t.slice(0,185).replace(/\s\S*$/,"")+"…":t};
+const AUT_RE=/(Senador[a]?|Deputad[oa])\s+(.+?)\s*\(([^/()]+)\/([A-Z]{2})\)/g;
+function autores(m){const out=[];let x;AUT_RE.lastIndex=0;while((x=AUT_RE.exec(m.autor||""))){out.push({cargo:x[1],nome:x[2].trim(),partido:x[3].trim(),uf:x[4]})}
+  return out.length?out:[{inst:true,nome:(m.autor||"Autoria não informada").trim()}]}
+const iniciais=n=>n.split(/\s+/).filter(w=>w.length>2||/^[A-Z]/.test(w)).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+function autorHTML(a,extra){return a.inst
+  ?`<span class="avatar inst" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg></span><span class="quem">${esc(a.nome)}<small>Autoria institucional</small></span>`
+  :`<span class="avatar" aria-hidden="true">${esc(iniciais(a.nome))}</span><span class="quem">${esc(a.nome)}<small>${a.cargo==="Senadora"?"Senadora":a.cargo==="Senador"?"Senador":a.cargo}</small></span><span class="partido" title="Partido e estado">${esc(a.partido)}-${esc(a.uf)}</span>${extra||""}`}
+function resumoHTML(e){if(!e)return `<p style="margin:0">A explicação deste projeto em linguagem simples ainda está sendo preparada e aparece aqui em breve. Enquanto isso, o texto oficial está logo acima.</p>`;return `<p>${esc(e.resumo)}</p>${(e.pontos||[]).length?`<ul>${e.pontos.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:""}${e.quem?`<p><b>Quem pode ser afetado:</b> ${esc(e.quem)}</p>`:""}<p class="nota" style="margin:4px 0 0">Gerado por IA a partir da ementa oficial. Pode conter imprecisões.</p>`}
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
+async function copy(t,ok){try{await navigator.clipboard.writeText(t);toast(ok||"Copiado");return true}catch(e){toast("Não deu para copiar. Selecione o texto e copie.");return false}}
+const contatos=m=>{const out=[],seen=new Set();(m.relatores||[]).forEach(c=>{if(DB.senadores[c]&&!seen.has(c)){seen.add(c);out.push({cod:c,papel:"Relatoria"})}});(m.autores_cod||[]).forEach(c=>{if(DB.senadores[c]&&!seen.has(c)){seen.add(c);out.push({cod:c,papel:"Autoria"})}});return out};
+const compDe=(cod,m)=>COMP.filter(c=>String(c.senador)===String(cod)&&(!c.temas||!c.temas.length||c.temas.some(t=>m.temas.includes(t))));
 
-// ---------- filtros e lista ----------
-function renderFilters(){
-  $("#q").value=F.q;
-  chips($("#temaChips"),TEMAS,F.temas,t=>{F.temas=toggleIn(F.temas,t);update()});
-  const tipos=["Todos",...[...new Set(DB.materias.map(m=>m.sigla))].sort()];
-  seg($("#tipoSeg"),tipos,F.tipo,v=>{F.tipo=v;update()});
-  $("#onlyRel").checked=F.onlyRel;$("#onlyFav").checked=F.onlyFav;$("#onlyMine").checked=F.onlyMine;$("#sort").value=F.sort;
+// ---------- assuntos (topo) ----------
+function renderTiles(){
+  const cont={};DB.materias.forEach(m=>m.temas.forEach(t=>cont[t]=(cont[t]||0)+1));
+  $("#tiles").innerHTML=TEMAS.map(t=>{const c=IC[t]||IC.Outros;return `<button class="tile" data-t="${esc(t)}" aria-pressed="${F.temas.includes(t)}"><span class="ic" style="background:${c[1]}">${icon(t)}</span><b>${esc(t)}</b><small>${(cont[t]||0).toLocaleString("pt-BR")} projetos</small></button>`}).join("");
+  $("#tiles").querySelectorAll(".tile").forEach(b=>b.onclick=()=>{F.temas=toggleIn(F.temas,b.dataset.t);update();document.getElementById("lista").scrollIntoView()});
 }
+
+// ---------- lista ----------
 function filtered(){
   const q=norm(F.q.trim());
   const r=DB.materias.filter(m=>{
     if(F.tipo!=="Todos"&&m.sigla!==F.tipo)return false;
     if(F.temas.length&&!m.temas.some(t=>F.temas.includes(t)))return false;
-    if(F.onlyRel&&!(m.relatores||[]).length)return false;
+    if(F.onlyRel&&!contatos(m).length)return false;
     if(F.onlyFav&&!prefs.favoritos.includes(m.id))return false;
     if(F.onlyMine&&!m.temas.some(t=>prefs.interesses.includes(t)))return false;
-    if(q&&!norm(ref(m)+" "+m.ementa+" "+m.autor+" "+m.temas.join(" ")).includes(q))return false;
+    if(q){const e=EXP[m.id];if(!norm(ref(m)+" "+tipoNome(m)+" "+m.ementa+" "+m.autor+" "+m.temas.join(" ")+(e?" "+e.resumo:"")).includes(q))return false}
     return true});
   r.sort((a,b)=>F.sort==="recente"?b.apresentacao.localeCompare(a.apresentacao):a.apresentacao.localeCompare(b.apresentacao));
   return r;
 }
+function renderAtivos(){
+  const a=[];
+  if(F.q)a.push([`Busca: “${F.q}”`,()=>{F.q="";$("#q").value=""}]);
+  F.temas.forEach(t=>a.push([t,()=>F.temas=F.temas.filter(x=>x!==t)]));
+  if(F.tipo!=="Todos")a.push([TIPOS[F.tipo]||F.tipo,()=>F.tipo="Todos"]);
+  if(F.onlyRel)a.push(["Com senador(a) para contatar",()=>F.onlyRel=false]);
+  if(F.onlyFav)a.push(["Salvos",()=>F.onlyFav=false]);
+  if(F.onlyMine)a.push(["Meus assuntos",()=>F.onlyMine=false]);
+  const box=$("#ativos");box.innerHTML="";
+  a.forEach(([txt,fn])=>{const b=document.createElement("button");b.className="ativo";b.textContent=txt;b.setAttribute("aria-label","Remover filtro: "+txt);b.onclick=()=>{fn();update()};box.appendChild(b)});
+  const n=(F.tipo!=="Todos")+F.onlyRel+F.onlyFav+F.onlyMine;
+  $("#filLabel").textContent=n?`Filtros (${n})`:"Filtros";
+  $("#resTitle").textContent=F.temas.length===1?F.temas[0]:F.temas.length>1?"Assuntos escolhidos":F.q?"Resultado da busca":"Todos os projetos";
+}
 function renderList(){
   const r=filtered(),L=$("#list");
-  $("#count").textContent=r.length.toLocaleString("pt-BR")+(r.length===1?" projeto":" projetos");
-  L.innerHTML="";
-  if(!r.length){L.innerHTML='<div class="empty">Nenhum projeto com esses filtros.<br>Tente remover um tema ou limpar a busca.</div>';$("#more").hidden=true;return}
-  r.slice(0,shown).forEach(m=>{
-    const fav=prefs.favoritos.includes(m.id),rels=m.relatores||[];
-    const el=document.createElement("article");el.className="card";
-    el.innerHTML=`<div class="meta"><span class="badge">${esc(ref(m))}</span>${m.apresentacao?`<span>Apresentado em ${esc(fmt(m.apresentacao))}</span>`:""}${m.autor?`<span>Autoria: ${esc(m.autor)}</span>`:""}</div>
-      <h2>${esc(m.ementa||"Ementa não informada")}</h2>
+  $("#count").textContent=`${r.length.toLocaleString("pt-BR")} ${r.length===1?"projeto em andamento":"projetos em andamento"}`;
+  if(!r.length){L.innerHTML=`<li class="vazio"><b>Nenhum projeto encontrado</b>Tente outra palavra ou remova algum filtro.</li>`;$("#more").hidden=true;return}
+  L.innerHTML=r.slice(0,shown).map(m=>{
+    const fav=prefs.favoritos.includes(m.id),cs=contatos(m),c=IC[m.temas[0]]||IC.Outros,au=autores(m),ex=EXP[m.id];
+    return `<li class="item"><span class="faixa" style="background:${c[0]}"></span><div>
+      <p class="tipo"><strong>${esc(tipoNome(m))}</strong><span>${esc(ref(m))}</span><span>apresentado em ${esc(fmt(m.apresentacao))}</span></p>
+      <h3>${esc(titulo(m))}</h3>
+      <div class="autoria">${autorHTML(au[0],au.length>1?`<span class="coaut">e mais ${au.length-1} ${au.length===2?"coautor(a)":"coautores"}</span>`:"")}</div>
       <div class="tags">${m.temas.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
-      <div class="actions">
-        <a class="btn primary" href="${ECID(m.id)}" target="_blank" rel="noopener noreferrer">Opinar no e-Cidadania ↗</a>
-        ${rels.length?`<button class="btn" data-act>📣 Acionar relatoria (${rels.length})</button>`:""}
-        <a class="btn" href="${TRAM(m.id)}" target="_blank" rel="noopener noreferrer">Tramitação ↗</a>
-        <button class="btn ${fav?"saved":""}" data-fav>${fav?"★ Salvo":"☆ Salvar"}</button>
-      </div>`;
-    el.querySelector("[data-fav]").onclick=()=>{prefs.favoritos=toggleIn(prefs.favoritos,m.id);persist();renderList();toast(fav?"Removido dos salvos":"Salvo neste aparelho")};
-    const a=el.querySelector("[data-act]");if(a)a.onclick=()=>openAct(m);
-    L.appendChild(el)});
+      <div class="acoes"><button class="btn pri sm" data-det="${esc(m.id)}">Entender e agir</button>
+        <button class="star" data-share="${esc(m.id)}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Compartilhar</button>
+        <button class="star" data-fav="${esc(m.id)}" aria-pressed="${fav}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>${fav?"Salvo":"Salvar"}</button>
+        ${cs.length?`<span class="contato-hint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>Dá para escrever para ${cs.length===1?"quem decide":cs.length+" senadores"}</span>`:""}
+      </div></div></li>`}).join("");
+  L.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>openShare(DB.materias.find(m=>m.id===b.dataset.share)));
+  L.querySelectorAll("[data-det]").forEach(b=>b.onclick=()=>openDet(DB.materias.find(m=>m.id===b.dataset.det)));
+  L.querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{const id=b.dataset.fav,on=prefs.favoritos.includes(id);prefs.favoritos=toggleIn(prefs.favoritos,id);persist();renderList();toast(on?"Removido dos salvos":"Salvo neste aparelho")});
   $("#more").hidden=r.length<=shown;
 }
-function update(){shown=PAGE;renderFilters();renderList();persist()}
+function update(keep){if(!keep)shown=PAGE;renderTiles();renderAtivos();renderList();persist()}
 
-// ---------- acionar relatoria ----------
-let cur=null,sel=[],pos="Apoio";
-const compDe=(cod,m)=>COMP.filter(c=>String(c.senador)===String(cod)&&(!c.temas||!c.temas.length||c.temas.some(t=>m.temas.includes(t))));
+// ---------- detalhe ----------
+let cur=null;
+function openDet(m){
+  cur=m;const e=EXP[m.id],cs=contatos(m),fav=prefs.favoritos.includes(m.id);
+  $("#detSup").textContent=`${tipoNome(m)} (${ref(m)})`;
+  $("#detTitle").textContent=tipoNome(m)==="Projeto de lei"?"Sobre este projeto de lei":"Sobre esta proposta";const au=autores(m);
+  $("#detBody").innerHTML=`
+    <div class="bloco"><h3>O que ele faz e como te afeta?</h3>
+      <div class="resumo-in" style="margin:0">${resumoHTML(e)}</div>
+      <details class="ementa"><summary>Ler o texto oficial (ementa)</summary><p>${esc(m.ementa)}</p></details>
+    </div>
+    <div class="bloco"><h3>Quem propôs</h3>
+      <div class="autores-lista">${au.map(a=>`<div class="autor-card autoria" style="margin:0">${autorHTML(a)}</div>`).join("")}</div>
+      <p class="nota">Apresentado em ${esc(fmt(m.apresentacao))}.</p>
+    </div>
+    <div class="bloco"><h3><span class="n">1</span>Dê sua opinião oficial</h3>
+      <p style="margin:0 0 10px">No portal e-Cidadania, do Senado, você vota “sim” ou “não”. Os gabinetes recebem esses resultados toda semana. É preciso fazer cadastro no portal.</p>
+      <a class="btn verde" href="${ECID(m.id)}" target="_blank" rel="noopener noreferrer">Opinar no e-Cidadania</a></div>
+    <div class="bloco"><h3><span class="n">2</span>Fale com quem decide</h3>
+      ${cs.length?`<p style="margin:0 0 10px">${cs.map(x=>`<span class="papel ${x.papel}">${x.papel}</span>${esc(DB.senadores[x.cod].nome)}`).join("<br>")}</p><button class="btn pri" id="goWrite">Quero ajuda para mandar uma mensagem</button><p class="nota">Três perguntas rápidas e a gente monta a mensagem para você copiar e enviar.</p>`
+        :`<p style="margin:0">Este projeto ainda não tem relatoria definida e a autoria não é de um senador em exercício. Por enquanto, a melhor forma de participar é opinar no e-Cidadania.</p>`}</div>
+    <div class="linha-acoes"><a class="btn sm" href="${TRAM(m.id)}" target="_blank" rel="noopener noreferrer">Ver a tramitação completa</a>
+      <button class="btn sm" id="detShare"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Compartilhar</button>
+      <button class="btn sm" id="detFav">${fav?"Remover dos salvos":"Salvar projeto"}</button></div>`;
+  $("#detShare").onclick=()=>openShare(m);
+  const gw=$("#goWrite");if(gw)gw.onclick=()=>{$("#dlgDet").close();openWrite(m)};
+  $("#detFav").onclick=()=>{prefs.favoritos=toggleIn(prefs.favoritos,m.id);persist();renderList();$("#detFav").textContent=prefs.favoritos.includes(m.id)?"Remover dos salvos":"Salvar projeto";toast(prefs.favoritos.includes(m.id)?"Salvo neste aparelho":"Removido dos salvos")};
+  $("#dlgDet").showModal();$("#dlgDet").scrollTop=0;
+}
+
+// ---------- assistente de mensagem ----------
+const POS={
+  apoio:["Apoio","Quero que seja aprovado"],
+  mudar:["Peço mudanças","Concordo em parte"],
+  contra:["Sou contra","Não quero que seja aprovado"],
+  info:["Quero entender","Saber o posicionamento"]
+};
+let sel=[],pos=null,step=1;
+function papelTxt(){const ps=new Set(contatos(cur).filter(x=>sel.includes(x.cod)).map(x=>x.papel));return ps.size===1?(ps.has("Relatoria")?"relator(a)":"autor(a)"):"relator(a) ou autor(a)"}
+function assunto(){return `${{apoio:"Apoio ao",mudar:"Sugestões sobre o",contra:"Posição contrária ao",info:"Pedido de informação sobre o"}[pos||"info"]} ${ref(cur)}`}
 function buildMsg(){
-  const ps=sel.map(c=>DB.senadores[c]).filter(Boolean);
+  const ps=sel.map(c=>DB.senadores[c]).filter(Boolean),r=ref(cur),p=papelTxt();
   const saud=ps.length===1?`Prezado(a) Senador(a) ${ps[0].nome},`:"Prezados(as) Senadores(as),";
-  const r=ref(cur);
-  let corpo;
-  if(pos==="Apoio")corpo=`Escrevo sobre o ${r}, que trata de: ${cur.ementa}\n\nManifesto apoio à proposta e peço que considere as contribuições da sociedade no seu relatório.`;
-  else if(pos==="Preocupação")corpo=`Escrevo sobre o ${r}, que trata de: ${cur.ementa}\n\nRegistro preocupação com a proposta e peço que avalie com cuidado seus impactos e as contribuições recebidas no e-Cidadania antes de concluir o relatório.`;
-  else corpo=`Escrevo sobre o ${r}, que trata de: ${cur.ementa}\n\nGostaria de saber seu posicionamento como relator(a) e os próximos passos previstos.`;
-  const prom=sel.flatMap(c=>compDe(c,cur).map(p=>`- ${DB.senadores[c]?.nome||""}: ${p.texto} (fonte: ${p.fonte})`));
-  const promTxt=prom.length?`\n\nLembro o compromisso público assumido:\n${prom.join("\n")}\nComo ele orienta sua atuação neste caso?`:"";
-  return `${saud}\n\n${corpo}${promTxt}\n\nConsulta pública: ${ECID(cur.id)}\n\nAtenciosamente,\n[seu nome, se quiser]`;
+  const abre={
+    apoio:`Escrevo para manifestar meu apoio ao ${r}, que trata de: ${cur.ementa}\n\nPeço que, como ${p}, trabalhe pela aprovação da proposta.`,
+    mudar:`Escrevo sobre o ${r}, que trata de: ${cur.ementa}\n\nConcordo com parte da proposta, mas peço que, como ${p}, considere ajustes antes que ela avance.`,
+    contra:`Escrevo para manifestar minha posição contrária ao ${r}, que trata de: ${cur.ementa}\n\nPeço que, como ${p}, considere os argumentos abaixo antes que a proposta avance.`,
+    info:`Escrevo sobre o ${r}, que trata de: ${cur.ementa}\n\nGostaria de saber seu posicionamento como ${p} e quais são os próximos passos previstos.`
+  }[pos||"info"];
+  const why=$("#wWhy").value.trim(),imp=$("#wImp").value.trim();
+  let corpo=abre;
+  if(why)corpo+=`\n\nPor que isso importa para mim: ${why}`;
+  if(imp)corpo+=`\n\nComo isso me afeta: ${imp}`;
+  const prom=sel.flatMap(c=>compDe(c,cur).map(x=>`- ${DB.senadores[c].nome}: ${x.texto} (fonte: ${x.fonte})`));
+  if(prom.length)corpo+=`\n\nLembro o compromisso público assumido:\n${prom.join("\n")}`;
+  const nome=$("#wNome").value.trim(),cid=$("#wCid").value.trim();
+  const ass=[nome||"[seu nome, se quiser]",cid].filter(Boolean).join("\n");
+  return `${saud}\n\n${corpo}\n\nAgradeço a atenção e aguardo retorno.\n\nAtenciosamente,\n${ass}`;
 }
-function renderAct(){
-  const pl=$("#parlList");pl.innerHTML="";
-  (cur.relatores||[]).forEach(cod=>{const p=DB.senadores[cod];if(!p)return;
-    const cs=compDe(cod,cur);
-    const d=document.createElement("div");d.className="parl";
-    d.innerHTML=`<label><input type="checkbox" ${sel.includes(cod)?"checked":""}><span><strong>${esc(p.nome)}</strong><small>Relatoria · ${esc(p.partido)}-${esc(p.uf)}${p.pagina?` · <a href="${esc(p.pagina)}" target="_blank" rel="noopener noreferrer">perfil oficial ↗</a>`:""}</small></span></label>
-      ${cs.length?cs.map(c=>`<div class="promise">📌 <strong>Compromisso público:</strong> ${esc(c.texto)}<div class="src">Fonte: <a href="${esc(c.fonte)}" target="_blank" rel="noopener noreferrer">${esc(c.fonte_desc||c.fonte)}</a>${c.data?` · ${esc(fmt(c.data))}`:""}</div></div>`).join(""):`<p class="note" style="margin:6px 0 0 26px">Nenhum compromisso público catalogado sobre este tema.</p>`}`;
-    d.querySelector("input").onchange=e=>{sel=e.target.checked?[...sel,cod]:sel.filter(x=>x!==cod);renderAct()};
-    pl.appendChild(d)});
-  seg($("#posSeg"),["Apoio","Preocupação","Pedido de informação"],pos,v=>{pos=v;renderAct()});
+function buildPrompt(){
+  const ps=contatos(cur).filter(x=>sel.includes(x.cod)).map(x=>`${DB.senadores[x.cod].nome} (${x.papel.toLowerCase()} do projeto)`).join("; ");
+  const e=EXP[cur.id],why=$("#wWhy").value.trim(),imp=$("#wImp").value.trim(),P=POS[pos||"info"];
+  return `Me ajude a escrever um e-mail curto e respeitoso para senador(es) do Senado Federal brasileiro.
+
+Projeto: ${ref(cur)} (${tipoNome(cur)})
+Ementa oficial: ${cur.ementa}
+${e?`Resumo simples (gerado por IA, pode ter imprecisões): ${e.resumo}\n`:""}Destinatário(s): ${ps}
+Minha posição: ${P[0]} (${P[1].toLowerCase()})
+${why?`Por que isso importa para mim: ${why}\n`:""}${imp?`Como isso me afeta: ${imp}\n`:""}
+Instruções:
+- Português do Brasil, tom cordial e direto, no máximo 200 palavras.
+- Comece com uma saudação formal ao(à) senador(a).
+- Use só as informações acima. Não invente dados, números, citações nem fatos sobre o projeto ou sobre mim.
+- Explique minha posição com clareza e termine pedindo um retorno ou posicionamento.
+- Deixe a assinatura como [nome] e [cidade/UF], para eu completar.
+- Sugira também uma linha de assunto.`;
+}
+function renderEnvio(){
   const emails=sel.map(c=>DB.senadores[c]?.email).filter(Boolean);
-  $("#msg").value=sel.length?buildMsg():"";
-  const box=$("#sendBox");
-  if(!sel.length){box.innerHTML='<p class="note">Selecione ao menos um(a) senador(a).</p>';return}
-  if(!emails.length){box.innerHTML='<p class="note">E-mail não informado nos dados abertos. Use o formulário do perfil oficial.</p><button class="btn primary" id="cpMsg">Copiar mensagem</button>';$("#cpMsg").onclick=()=>copy($("#msg").value,"Mensagem copiada");return}
-  box.innerHTML=`<small style="color:var(--muted)">Destinatário(s):</small><div class="addr">${esc(emails.join(", "))}</div>
-    <div class="actions"><button class="btn primary" id="cpMsg">Copiar mensagem</button><button class="btn" id="cpAddr">Copiar e-mail(s)</button>
-    <a class="btn" id="mailto">Abrir no meu e-mail</a></div>
-    <p class="note">Se o botão de e-mail não abrir, copie a mensagem e os endereços.</p>`;
-  $("#mailto").href=`mailto:${emails.join(",")}?subject=${encodeURIComponent("Consulta pública — "+ref(cur))}&body=${encodeURIComponent($("#msg").value)}`;
-  $("#cpMsg").onclick=()=>copy($("#msg").value,"Mensagem copiada");$("#cpAddr").onclick=()=>copy(emails.join(", "),"E-mails copiados");
+  const perfis=sel.map(c=>DB.senadores[c]).filter(p=>p&&p.pagina);
+  const box=$("#wEnvio");
+  if(!sel.length){box.innerHTML=`<p class="nota" style="margin:0">Marque pelo menos uma pessoa em “Para quem vai”.</p>`;return}
+  box.innerHTML=`<ol class="passos">
+    <li><b>Copie a mensagem.</b><div class="copiavel"><button class="btn pri sm" id="cpMsg">Copiar mensagem</button></div></li>
+    <li><b>Abra seu e-mail</b> (Gmail, Outlook ou o app do celular) e comece uma nova mensagem.</li>
+    ${emails.length?`<li><b>No campo “Para”, cole o endereço:</b><div class="copiavel"><code>${esc(emails.join(", "))}</code><button class="btn sm" id="cpTo">Copiar endereço${emails.length>1?"s":""}</button></div></li>`
+      :`<li>O e-mail desta pessoa não consta nos dados abertos. Use o formulário do perfil oficial, no fim desta tela.</li>`}
+    <li><b>No assunto, cole:</b><div class="copiavel"><code>${esc(assunto())}</code><button class="btn sm" id="cpSub">Copiar assunto</button></div></li>
+    <li><b>Cole a mensagem no corpo do e-mail</b>, confira seu nome e envie.</li></ol>
+    ${emails.length?`<p class="nota" style="margin-top:0">Atalho: <a id="mailto" href="#">abrir direto no meu app de e-mail</a> (nem todo celular aceita).</p>`:""}
+    <p class="nota">Prefere outro canal? ${perfis.map(p=>`<a href="${esc(p.pagina)}" target="_blank" rel="noopener noreferrer">Perfil oficial de ${esc(p.nome)}</a>`).join(", ")}${perfis.length?". ":""}Alô Senado: 0800 61 2211 (ligação gratuita).</p>`;
+  $("#cpMsg").onclick=()=>copy($("#wMsg").value,"Mensagem copiada");
+  if(emails.length){$("#cpTo").onclick=()=>copy(emails.join(", "),"Endereço copiado");
+    $("#mailto").href=`mailto:${emails.join(",")}?subject=${encodeURIComponent(assunto())}&body=${encodeURIComponent($("#wMsg").value)}`}
+  $("#cpSub").onclick=()=>copy(assunto(),"Assunto copiado");
 }
-function openAct(m){cur=m;sel=[...(m.relatores||[])].filter(c=>DB.senadores[c]);pos="Apoio";$("#actRef").textContent=ref(m);$("#actTitle").textContent="Acionar relatoria";renderAct();$("#dlgAct").showModal()}
-$("#msg").addEventListener("input",()=>{const a=$("#mailto");if(a)a.href=a.href.split("&body=")[0]+"&body="+encodeURIComponent($("#msg").value)});
+function refreshMsg(){$("#wMsg").value=sel.length?buildMsg():"";renderEnvio()}
+function renderPessoas(){
+  $("#wPessoas").innerHTML=contatos(cur).map(({cod,papel})=>{const p=DB.senadores[cod],cs=compDe(cod,cur);
+    return `<div class="pessoa"><label><input type="checkbox" value="${esc(cod)}" ${sel.includes(cod)?"checked":""}><span><strong>${esc(p.nome)}</strong><span class="papel ${papel}">${papel}</span><span style="color:var(--tinta-2);font-size:14.5px">${esc(p.partido)}-${esc(p.uf)}</span></span></label>
+      ${cs.map(c=>`<div class="compromisso"><b>Compromisso público:</b> ${esc(c.texto)} <a href="${esc(c.fonte)}" target="_blank" rel="noopener noreferrer">${esc(c.fonte_desc||"fonte")}</a></div>`).join("")}</div>`}).join("");
+  $("#wPessoas").querySelectorAll("input").forEach(i=>i.onchange=()=>{sel=i.checked?[...sel,i.value]:sel.filter(x=>x!==i.value);refreshMsg()});
+}
+function goStep(n){
+  step=n;
+  document.querySelectorAll("#dlgW .passo").forEach(sec=>sec.hidden=Number(sec.dataset.step)!==n);
+  document.querySelectorAll("#dlgW .progresso span").forEach((b,i)=>b.classList.toggle("on",i<n));
+  $("#wBack").style.visibility=n===1?"hidden":"visible";
+  $("#wNext").hidden=n===4;
+  $("#wNext").textContent=n===3?"Ver minha mensagem":(n===2&&!$("#wWhy").value.trim())?"Pular":"Próxima";
+  if(n===3)$("#wNext").textContent="Ver minha mensagem";
+  $("#wNext").disabled=n===1&&!pos;
+  if(n===4){renderPessoas();refreshMsg()}
+  $("#dlgW").scrollTop=0;
+  const f={2:"#wWhy",3:"#wImp"}[n];if(f)setTimeout(()=>$(f).focus(),50);
+}
+function renderPos(){
+  $("#wPos").innerHTML=Object.entries(POS).map(([k,[a,b]])=>`<button class="opcao" data-p="${k}" aria-pressed="${k===pos}">${a}<small>${b}</small></button>`).join("");
+  $("#wPos").querySelectorAll(".opcao").forEach(b=>b.onclick=()=>{pos=b.dataset.p;renderPos();$("#wNext").disabled=false;setTimeout(()=>goStep(2),150)});
+}
+function openWrite(m){
+  cur=m;const cs=contatos(m),rel=cs.filter(x=>x.papel==="Relatoria");sel=(rel.length?rel:cs.slice(0,3)).map(x=>x.cod);pos=null;
+  ["#wWhy","#wImp","#wNome","#wCid","#wMsg"].forEach(s=>$(s).value="");$("#wIABox").hidden=true;
+  $("#wSup").textContent=`${tipoNome(m)} (${ref(m)})`;renderPos();goStep(1);$("#dlgW").showModal();
+}
+$("#wNext").onclick=()=>{if(step<4)goStep(step+1)};
+$("#wBack").onclick=()=>{if(step>1)goStep(step-1)};
+$("#wWhy").addEventListener("input",()=>{if(step===2)$("#wNext").textContent=$("#wWhy").value.trim()?"Próxima":"Pular"});
+["#wNome","#wCid"].forEach(s=>$(s).addEventListener("input",refreshMsg));
+$("#wMsg").addEventListener("input",()=>{const a=$("#mailto");if(a)a.href=a.href.split("&body=")[0]+"&body="+encodeURIComponent($("#wMsg").value)});
+$("#wIA").onclick=async()=>{if(!sel.length){toast("Marque para quem vai a mensagem");return}if(await copy(buildPrompt(),"Instrução copiada")){$("#wIABox").hidden=false;$("#wIABox").scrollIntoView({block:"nearest"})}};
+$("#dlgW").addEventListener("close",()=>["#wWhy","#wImp","#wNome","#wCid","#wMsg"].forEach(s=>$(s).value=""));
+
+// ---------- compartilhar ----------
+const linkDe=m=>location.href.split("#")[0]+"#p"+m.id;
+function textoShare(m){const e=m.ementa.length>160?m.ementa.slice(0,155).replace(/\s\S*$/,"")+"…":m.ementa;
+  return `${tipoNome(m)} ${ref(m)} no Senado: ${e}\n\nEntenda o que ele faz e dê sua opinião:`}
+function openShare(m){
+  const url=linkDe(m),txt=textoShare(m);
+  $("#shSup").textContent=`${tipoNome(m)} (${ref(m)})`;
+  $("#shPrev").textContent=txt+"\n"+url;
+  $("#shWa").href="https://wa.me/?text="+encodeURIComponent(txt+"\n"+url);
+  const nat=$("#shNative");nat.hidden=!navigator.share;
+  nat.onclick=async()=>{try{await navigator.share({title:`${tipoNome(m)} ${ref(m)}`,text:txt,url})}catch(e){}};
+  $("#shCopy").onclick=()=>copy(url,"Link copiado");
+  $("#dlgShare").showModal();
+}
+// abre o projeto vindo de um link compartilhado (#p123456)
+function abrirDoLink(){const x=location.hash.match(/^#p(\d+)$/);if(!x)return;const m=DB.materias.find(i=>i.id===x[1]);
+  if(m){if(!$("#dlgDet").open)openDet(m)}else toast("Esse projeto não está mais em tramitação no Senado.")}
+window.addEventListener("hashchange",abrirDoLink);
+
+// ---------- filtros ----------
+function renderFil(){
+  const tipos=["Todos",...Object.keys(TIPOS).filter(k=>DB.materias.some(m=>m.sigla===k))];
+  $("#fTipo").innerHTML=tipos.map(t=>`<button class="chip" data-t="${t}" aria-pressed="${F.tipo===t}">${t==="Todos"?"Todos":esc(TIPOS[t])}</button>`).join("");
+  $("#fTipo").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{F.tipo=b.dataset.t;update();renderFil()});
+  $("#fInt").innerHTML=TEMAS.map(t=>`<button class="chip" data-t="${esc(t)}" aria-pressed="${prefs.interesses.includes(t)}">${esc(t)}</button>`).join("");
+  $("#fInt").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{prefs.interesses=toggleIn(prefs.interesses,b.dataset.t);update();renderFil()});
+  $("#fCont").checked=F.onlyRel;$("#fFav").checked=F.onlyFav;$("#fMine").checked=F.onlyMine;
+  $("#fVer").textContent=`Ver ${filtered().length.toLocaleString("pt-BR")} projetos`;
+}
+$("#openFil").onclick=()=>{renderFil();$("#dlgFil").showModal()};
+$("#fCont").onchange=e=>{F.onlyRel=e.target.checked;update();renderFil()};
+$("#fFav").onchange=e=>{F.onlyFav=e.target.checked;update();renderFil()};
+$("#fMine").onchange=e=>{F.onlyMine=e.target.checked;update();renderFil()};
+$("#fLimpar").onclick=()=>{F=Object.assign({},DEF);$("#q").value="";update();renderFil()};
 
 // ---------- privacidade ----------
-function renderPriv(){$("#privList").innerHTML=`<li>Projetos salvos: <strong>${prefs.favoritos.length}</strong></li><li>Temas de interesse: <strong>${esc(prefs.interesses.join(", ")||"nenhum")}</strong></li><li>Últimos filtros usados</li>`}
-$("#openPrivacy").onclick=()=>{renderPriv();$("#importBox").hidden=true;$("#dlgPriv").showModal()};
-$("#exportBtn").onclick=()=>copy(JSON.stringify({favoritos:prefs.favoritos,interesses:prefs.interesses}),"Copiado — cole no outro aparelho");
+function renderPriv(){$("#privList").innerHTML=`<li>Projetos salvos: <b>${prefs.favoritos.length}</b></li><li>Assuntos de interesse: <b>${esc(prefs.interesses.join(", ")||"nenhum")}</b></li><li>Os últimos filtros usados</li>`}
+$("#openPriv").onclick=()=>{renderPriv();$("#importBox").hidden=true;$("#dlgPriv").showModal()};
+$("#exportBtn").onclick=()=>copy(JSON.stringify({favoritos:prefs.favoritos,interesses:prefs.interesses}),"Copiado. Cole no outro aparelho.");
 $("#importToggle").onclick=()=>{$("#importBox").hidden=!$("#importBox").hidden};
-$("#importBtn").onclick=()=>{try{const o=JSON.parse($("#importTxt").value);
-  prefs.favoritos=(o.favoritos||[]).map(String).slice(0,2000);prefs.interesses=(o.interesses||[]).filter(t=>TEMAS.includes(t));
-  persist();renderPriv();renderList();toast("Importado")}catch(e){toast("Texto inválido")}};
-$("#wipeBtn").onclick=()=>{store.wipe();prefs={favoritos:[],interesses:[]};F=Object.assign({},DEF);renderPriv();update();store.wipe();toast("Tudo apagado deste aparelho")};
+$("#importBtn").onclick=()=>{try{const o=JSON.parse($("#importTxt").value);prefs.favoritos=(o.favoritos||[]).map(String).slice(0,2000);prefs.interesses=(o.interesses||[]).filter(t=>TEMAS.includes(t));persist();renderPriv();update();toast("Dados trazidos para este aparelho")}catch(e){toast("Esse texto não é válido. Copie de novo no outro aparelho.")}};
+$("#wipeBtn").onclick=()=>{store.wipe();prefs={favoritos:[],interesses:[]};F=Object.assign({},DEF);$("#q").value="";renderPriv();update();store.wipe();toast("Tudo apagado deste aparelho")};
 
-function renderInt(){chips($("#intChips"),TEMAS,prefs.interesses,t=>{prefs.interesses=toggleIn(prefs.interesses,t);persist();renderInt();renderList()})}
-$("#setInterests").onclick=()=>{renderInt();$("#dlgInt").showModal()};
-
-// ---------- eventos ----------
-let deb;$("#q").oninput=e=>{F.q=e.target.value;clearTimeout(deb);deb=setTimeout(()=>{shown=PAGE;renderList();persist()},150)};
-$("#onlyRel").onchange=e=>{F.onlyRel=e.target.checked;update()};
-$("#onlyFav").onchange=e=>{F.onlyFav=e.target.checked;update()};
-$("#onlyMine").onchange=e=>{F.onlyMine=e.target.checked;if(e.target.checked&&!prefs.interesses.length){renderInt();$("#dlgInt").showModal()}update()};
+// ---------- eventos gerais ----------
+let deb;$("#q").addEventListener("input",e=>{F.q=e.target.value;clearTimeout(deb);deb=setTimeout(()=>update(),180)});
+$("#searchForm").onsubmit=e=>{e.preventDefault();F.q=$("#q").value;update();document.getElementById("lista").scrollIntoView()};
 $("#sort").onchange=e=>{F.sort=e.target.value;update()};
-$("#clearFilters").onclick=()=>{F=Object.assign({},DEF);update()};
 $("#more").onclick=()=>{shown+=PAGE;renderList()};
-document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.close()}));
 
 // ---------- carga ----------
 (async()=>{
   try{
-    const [s,c]=await Promise.all([fetch("data/senado.json",{cache:"no-cache"}).then(r=>r.json()),fetch("data/compromissos.json",{cache:"no-cache"}).then(r=>r.json()).catch(()=>[])]);
-    DB=s;COMP=Array.isArray(c)?c.filter(x=>x.senador&&x.texto&&x.fonte&&!x.exemplo):[];
-    if(s.demo){$("#demoNotice").hidden=false;COMP=Array.isArray(c)?c.filter(x=>x.senador&&x.texto&&x.fonte):[]}
+    const get=(u,d)=>fetch(u,{cache:"no-cache"}).then(r=>r.ok?r.json():d).catch(()=>d);
+    const [s,c,x]=await Promise.all([fetch("data/senado.json",{cache:"no-cache"}).then(r=>r.json()),get("data/compromissos.json",[]),get("data/explicacoes.json",{})]);
+    DB=s;EXP=x&&typeof x==="object"?x:{};
+    COMP=Array.isArray(c)?c.filter(i=>i.senador&&i.texto&&i.fonte&&(s.demo||!i.exemplo)):[];
+    if(s.demo)$("#demo").hidden=false;
     TEMAS=[...new Set(DB.materias.flatMap(m=>m.temas))].sort((a,b)=>a==="Outros"?1:b==="Outros"?-1:a.localeCompare(b));
-    F.temas=F.temas.filter(t=>TEMAS.includes(t));
-    if(s.gerado_em)$("#updated").textContent=`Atualizado em ${fmt(s.gerado_em)} · Fonte: ${s.fonte||"Senado Federal"}`;
-    update();
-  }catch(e){$("#count").textContent="";$("#list").innerHTML='<div class="empty">Não foi possível carregar os dados agora. Tente de novo em instantes.</div>'}
+    F.temas=F.temas.filter(t=>TEMAS.includes(t));$("#q").value=F.q;$("#sort").value=F.sort;
+    if(s.gerado_em)$("#updated").textContent=`Dados atualizados em ${fmt(s.gerado_em)}. Fonte: ${s.fonte||"Senado Federal"}.`;
+    update();abrirDoLink();
+  }catch(e){$("#count").textContent="";$("#list").innerHTML=`<li class="vazio"><b>Os dados não carregaram</b>Verifique sua conexão e recarregue a página.</li>`}
 })();
 </script>
 </body>
