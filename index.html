@@ -88,6 +88,8 @@ select.sort{border:2px solid var(--tinta);border-radius:12px;padding:8px 10px;ba
 .item .tipo{font-size:14px;color:var(--tinta-2);margin:0 0 4px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
 .item .tipo strong{color:var(--tinta)}
 .item h3{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.25;letter-spacing:-.01em;margin:0 0 8px;max-width:62ch}
+.selo{display:inline-flex;align-items:center;gap:5px;background:var(--lilas-claro);color:var(--lilas);font-weight:800;font-size:12.5px;border-radius:999px;padding:3px 10px 3px 8px;margin:0 0 8px}
+.selo svg{flex:none}
 .autoria{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap}
 .avatar{flex:none;width:34px;height:34px;border-radius:50%;background:var(--tinta);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:.02em}
 .avatar.inst{background:var(--ceu);color:var(--cobalto)}
@@ -336,6 +338,7 @@ h3.q{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.2;l
   <div class="d-b">
     <div class="bloco"><h3>Tipo de proposta</h3><div class="chips" id="fTipo"></div></div>
     <div class="bloco">
+      <label class="toggle"><input type="checkbox" id="fExp"> Só com explicação simples disponível</label>
       <label class="toggle"><input type="checkbox" id="fCont"> Só com senador(a) para contatar</label>
       <label class="toggle"><input type="checkbox" id="fFav"> Só os que salvei</label>
       <label class="toggle"><input type="checkbox" id="fMine"> Só os meus assuntos de interesse</label>
@@ -392,7 +395,7 @@ let DB={materias:[],senadores:{}},COMP=[],EXP={},TEMAS=[];
 const KEY="potikia.senado.v1";
 const store={load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}},save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}},wipe(){try{localStorage.removeItem(KEY)}catch(e){}}};
 let prefs=Object.assign({favoritos:[],interesses:[]},store.load());
-const DEF={q:"",temas:[],tipo:"Todos",onlyRel:false,onlyFav:false,onlyMine:false,sort:"recente"};
+const DEF={q:"",temas:[],tipo:"Todos",onlyRel:false,onlyFav:false,onlyMine:false,onlyExp:false,sort:"recente"};
 let F=Object.assign({},DEF,prefs.filtros||{}),shown=PAGE;
 const persist=()=>store.save({favoritos:prefs.favoritos,interesses:prefs.interesses,filtros:F});
 
@@ -433,6 +436,7 @@ function filtered(){
     if(F.tipo!=="Todos"&&m.sigla!==F.tipo)return false;
     if(F.temas.length&&!m.temas.some(t=>F.temas.includes(t)))return false;
     if(F.onlyRel&&!contatos(m).length)return false;
+    if(F.onlyExp&&!EXP[m.id])return false;
     if(F.onlyFav&&!prefs.favoritos.includes(m.id))return false;
     if(F.onlyMine&&!m.temas.some(t=>prefs.interesses.includes(t)))return false;
     if(q){const e=EXP[m.id];if(!norm(ref(m)+" "+tipoNome(m)+" "+m.ementa+" "+m.autor+" "+m.temas.join(" ")+(e?" "+e.resumo:"")).includes(q))return false}
@@ -446,11 +450,12 @@ function renderAtivos(){
   F.temas.forEach(t=>a.push([t,()=>F.temas=F.temas.filter(x=>x!==t)]));
   if(F.tipo!=="Todos")a.push([TIPOS[F.tipo]||F.tipo,()=>F.tipo="Todos"]);
   if(F.onlyRel)a.push(["Com senador(a) para contatar",()=>F.onlyRel=false]);
+  if(F.onlyExp)a.push(["Com explicação simples",()=>F.onlyExp=false]);
   if(F.onlyFav)a.push(["Salvos",()=>F.onlyFav=false]);
   if(F.onlyMine)a.push(["Meus assuntos",()=>F.onlyMine=false]);
   const box=$("#ativos");box.innerHTML="";
   a.forEach(([txt,fn])=>{const b=document.createElement("button");b.className="ativo";b.textContent=txt;b.setAttribute("aria-label","Remover filtro: "+txt);b.onclick=()=>{fn();update()};box.appendChild(b)});
-  const n=(F.tipo!=="Todos")+F.onlyRel+F.onlyFav+F.onlyMine;
+  const n=(F.tipo!=="Todos")+F.onlyRel+F.onlyExp+F.onlyFav+F.onlyMine;
   $("#filLabel").textContent=n?`Filtros (${n})`:"Filtros";
   $("#resTitle").textContent=F.temas.length===1?F.temas[0]:F.temas.length>1?"Assuntos escolhidos":F.q?"Resultado da busca":"Todos os projetos";
 }
@@ -462,6 +467,7 @@ function renderList(){
     const fav=prefs.favoritos.includes(m.id),cs=contatos(m),c=IC[m.temas[0]]||IC.Outros,au=autores(m),ex=EXP[m.id];
     return `<li class="item"><span class="faixa" style="background:${c[0]}"></span><div>
       <p class="tipo"><strong>${esc(tipoNome(m))}</strong><span>${esc(ref(m))}</span><span>apresentado em ${esc(fmt(m.apresentacao))}</span></p>
+      ${ex?`<span class="selo" title="Este projeto já tem explicação em linguagem simples"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 6.3L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.7z"/></svg>Explicação simples disponível</span>`:""}
       <h3>${esc(titulo(m))}</h3>
       <div class="autoria">${autorHTML(au[0],au.length>1?`<span class="coaut">e mais ${au.length-1} ${au.length===2?"coautor(a)":"coautores"}</span>`:"")}</div>
       <div class="tags">${m.temas.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
@@ -636,11 +642,12 @@ function renderFil(){
   $("#fTipo").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{F.tipo=b.dataset.t;update();renderFil()});
   $("#fInt").innerHTML=TEMAS.map(t=>`<button class="chip" data-t="${esc(t)}" aria-pressed="${prefs.interesses.includes(t)}">${esc(t)}</button>`).join("");
   $("#fInt").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{prefs.interesses=toggleIn(prefs.interesses,b.dataset.t);update();renderFil()});
-  $("#fCont").checked=F.onlyRel;$("#fFav").checked=F.onlyFav;$("#fMine").checked=F.onlyMine;
+  $("#fCont").checked=F.onlyRel;$("#fExp").checked=!!F.onlyExp;$("#fFav").checked=F.onlyFav;$("#fMine").checked=F.onlyMine;
   $("#fVer").textContent=`Ver ${filtered().length.toLocaleString("pt-BR")} projetos`;
 }
 $("#openFil").onclick=()=>{renderFil();$("#dlgFil").showModal()};
 $("#fCont").onchange=e=>{F.onlyRel=e.target.checked;update();renderFil()};
+$("#fExp").onchange=e=>{F.onlyExp=e.target.checked;update();renderFil()};
 $("#fFav").onchange=e=>{F.onlyFav=e.target.checked;update();renderFil()};
 $("#fMine").onchange=e=>{F.onlyMine=e.target.checked;update();renderFil()};
 $("#fLimpar").onclick=()=>{F=Object.assign({},DEF);$("#q").value="";update();renderFil()};
