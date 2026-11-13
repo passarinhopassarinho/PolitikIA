@@ -11,7 +11,6 @@ permissions:
   contents: write
   pages: write
   id-token: write
-  models: read
 
 concurrency:
   group: pages
@@ -20,7 +19,7 @@ concurrency:
 jobs:
   atualizar:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 120
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -35,11 +34,28 @@ jobs:
         if: github.event_name != 'push'
         run: python coletor/coletor.py
 
-      - name: Gerar explicações com IA (GitHub Models)
+      - name: Preparar IA aberta (Ollama)
         if: github.event_name != 'push'
+        id: ollama
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODELO_IA: qwen3:4b
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama 2>/dev/null || true
+          mkdir -p "$HOME/.ollama-models"
+          OLLAMA_MODELS="$HOME/.ollama-models" nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do curl -s http://127.0.0.1:11434/api/version && break; sleep 2; done
+          OLLAMA_MODELS="$HOME/.ollama-models" ollama pull "$MODELO_IA"
+
+      - name: Gerar explicações com IA
+        if: github.event_name != 'push' && steps.ollama.outcome == 'success'
+        continue-on-error: true
+        env:
+          PROVEDOR_IA: ollama
+          MODELO_IA: qwen3:4b
+          MAX_EXPLICACOES: "200"
+          TEMPO_MAX_MIN: "70"
         run: python coletor/explicar.py
 
       - name: Guardar dados no repositório
